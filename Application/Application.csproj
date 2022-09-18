@@ -14,14 +14,24 @@
       <PackageReference Include="MediatR" Version="10.0.1" />
       <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
       <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
-      <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+      <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.0" />
       <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="7.0.0-preview.7.22375.6" />
+      <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.8.0" />
+      <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.8.0" />
     </ItemGroup>
 
     <ItemGroup>
       <Folder Include="Features\Courses\Constants" />
       <Folder Include="Features\Courses\Models" />
-      <Folder Include="Features\Courses\Rules" />
+      <Folder Include="Features\CourseTech\Constants" />
+      <Folder Include="Features\CourseTech\Models" />
+      <Folder Include="Features\CourseTech\Queries\GetCourseTechList" />
+      <Folder Include="Features\CourseTech\Rules" />
+      <Folder Include="Features\User\Constants" />
+      <Folder Include="Features\User\Models" />
+      <Folder Include="Features\User\Queries\GetUserById" />
+      <Folder Include="Features\User\Queries\GetUserList" />
+      <Folder Include="Features\User\Rules" />
     </ItemGroup>
 
     <ItemGroup>

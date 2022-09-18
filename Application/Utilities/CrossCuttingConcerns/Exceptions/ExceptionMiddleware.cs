@@ -1,8 +1,9 @@
-﻿using System.Net;
-using System.Runtime.CompilerServices;
-using FluentValidation;
+﻿using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
+using Application.Utilities.CrossCuttingConcerns.Exceptions;
+
 namespace Application.Utilities.CrossCuttingConcerns.Exceptions;
 
 public class ExceptionMiddleware
@@ -20,9 +21,9 @@ public class ExceptionMiddleware
         {
             await _next(context);
         }
-        catch(Exception e)
+        catch (Exception exception)
         {
-            await HandleExceptionAsync(context, e);
+            await HandleExceptionAsync(context, exception);
         }
     }
 
@@ -35,6 +36,20 @@ public class ExceptionMiddleware
         if (exception.GetType() == typeof(AuthorizationException))
             return CreateAuthorizationException(context, exception);
         return CreateInternalException(context, exception);
+    }
+
+    private Task CreateAuthorizationException(HttpContext context, Exception exception)
+    {
+        context.Response.StatusCode = Convert.ToInt32(HttpStatusCode.Unauthorized);
+
+        return context.Response.WriteAsync(new AuthorizationExceptionProblemDetails
+        {
+            Status = StatusCodes.Status401Unauthorized,
+            Type = "https://example.com/probs/authorization",
+            Title = "Authorization exception",
+            Detail = exception.Message,
+            Instance = ""
+        }.ToString());
     }
 
     private Task CreateBusinessException(HttpContext context, Exception exception)
@@ -51,35 +66,6 @@ public class ExceptionMiddleware
         }.ToString());
     }
 
-    private Task CreateInternalException(HttpContext context, Exception exception)
-    {
-        context.Response.StatusCode = Convert.ToInt32(HttpStatusCode.InternalServerError);
-
-        return context.Response.WriteAsync(new ProblemDetails
-        {
-            Status = StatusCodes.Status500InternalServerError,
-            Type = "https://example.com/probs/internal",
-            Title = "Internal exception",
-            Detail = exception.Message,
-            Instance = ""
-        }.ToString());
-    }
-
-    private Task CreateAuthorizationException(HttpContext context, Exception exception)
-    {
-        context.Response.StatusCode = Convert.ToInt32(HttpStatusCode.Unauthorized);
-
-        return context.Response.WriteAsync(new AuthorizationExceptionProblemDetails
-        {
-            Status = StatusCodes.Status401Unauthorized,
-            Type = "https://example.com/probs/authorization",
-            Title = "Authorization exception",
-            Detail = exception.Message,
-            Instance = ""
-            
-        }.ToString());
-    }
-
     private Task CreateValidationException(HttpContext context, Exception exception)
     {
         context.Response.StatusCode = Convert.ToInt32(HttpStatusCode.BadRequest);
@@ -93,6 +79,20 @@ public class ExceptionMiddleware
             Detail = "",
             Instance = "",
             Errors = errors
+        }.ToString());
+    }
+
+    private Task CreateInternalException(HttpContext context, Exception exception)
+    {
+        context.Response.StatusCode = Convert.ToInt32(HttpStatusCode.InternalServerError);
+
+        return context.Response.WriteAsync(new ProblemDetails
+        {
+            Status = StatusCodes.Status500InternalServerError,
+            Type = "https://example.com/probs/internal",
+            Title = "Internal exception",
+            Detail = exception.Message,
+            Instance = ""
         }.ToString());
     }
 }

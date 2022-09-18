@@ -10,6 +10,10 @@ public class BaseDbContext : DbContext
     protected IConfiguration _configuration;
 
     public DbSet<Course> Courses { get; set; }
+    public DbSet<User> Users { get; set; }
+    public DbSet<OperationClaim> OperationClaims { get; set; }
+    public DbSet<UserOperationClaim>  UserOperationClaims { get; set; }
+    public DbSet<CourseTechs>  CourseTech { get; set; }
 
     public BaseDbContext()
     {

@@ -5,8 +5,6 @@ namespace Application.Utilities.CrossCuttingConcerns.Exceptions;
 
 public class BusinessExceptionProblemDetails:ProblemDetails
 {
-    public override string ToString()
-    {
-        return JsonConvert.SerializeObject(this);
-    }
+    public override string ToString()=>JsonConvert.SerializeObject(this);
+
 }

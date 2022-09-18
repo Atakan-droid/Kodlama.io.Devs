@@ -17,6 +17,8 @@ public static class PersistanceServiceRegister
                 UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
         services.AddScoped<ICourseRepository, CourseRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<ICourseTechRepository, CourseTechRepository>();
 
         return services;
     }
